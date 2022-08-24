@@ -33,7 +33,7 @@ def save_file(filepath, content):
         outfile.write(content)
 
 
-openai.api_key = open_file('openaiapikey.txt')
+openai.api_key = open_file('openaiapikey.txt').rstrip()
 scene_dir = 'scenes/'
 service_name = 'sensor_simulation'
 content_prefix = 'Sensory input scene: '
