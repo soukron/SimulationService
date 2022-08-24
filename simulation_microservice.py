@@ -14,6 +14,15 @@ nexus_service_host=os.getenv('NEXUS_SERVICE_HOST', '127.0.0.1')
 nexus_service_port=os.getenv('NEXUS_SERVICE_PORT', '8888')
 
 
+def wait_for_service(service_name, service_port):
+    while True:
+        try:
+            return requests.get('http://' + service_name + ':' + service_port)
+        except requests.exceptions.ConnectionError:
+            print('Waiting for ' + service_name + ' to be reachable...')
+            sleep(10)
+
+
 def open_file(filepath):
     with open(filepath, 'r', encoding='utf-8') as infile:
         return infile.read()
@@ -107,6 +116,9 @@ def find_actions(memories):
 
 
 if __name__ == '__main__':
+    wait_for_service(embedding_service_host, embedding_service_port)
+    wait_for_service(nexus_service_host, nexus_service_port)
+
     new_scene = 'Two men are sitting at a stone chess table in Central Park. They are playing chess. The sun is shining and birds are singing. It is a summer day. Children are running and playing in the distance. Horns honking and the bustle of New York can be heard in the background.'
     backstory = new_scene
     while True:
